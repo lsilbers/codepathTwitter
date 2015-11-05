@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate;
+package com.lsilbers.apps.twitternator;
 
 import android.content.Context;
 

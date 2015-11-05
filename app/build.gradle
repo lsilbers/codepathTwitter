@@ -5,9 +5,9 @@ android {
     buildToolsVersion "23.0.0"
 
     defaultConfig {
-        applicationId "com.codepath.apps.restclienttemplate"
+        applicationId "com.lsilbers.apps.twitternator"
         minSdkVersion 16
-        targetSdkVersion 21
+        targetSdkVersion 23
     }
 
     buildTypes {

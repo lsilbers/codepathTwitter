@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.models;
+package com.lsilbers.apps.twitternator.models;
 
 import java.util.List;
 
