@@ -2,12 +2,14 @@ package com.lsilbers.apps.twitternator;
 
 import android.content.Context;
 
+import com.lsilbers.apps.twitternator.network.TwitterClient;
+
 /*
  * This is the Android application itself and is used to configure various settings
  * including the image cache in memory and on disk. This also adds a singleton
  * for accessing the relevant rest client.
  *
- *     TwitterClient client = TwitterApplication.getRestClient();
+ *     TwitterClient client = TwitterApplication.getTwitterClient();
  *     // use client to send requests to API
  *
  */
@@ -20,7 +22,7 @@ public class TwitterApplication extends com.activeandroid.app.Application {
 		TwitterApplication.context = this;
 	}
 
-	public static TwitterClient getRestClient() {
+	public static TwitterClient getTwitterClient() {
 		return (TwitterClient) TwitterClient.getInstance(TwitterClient.class, TwitterApplication.context);
 	}
 }

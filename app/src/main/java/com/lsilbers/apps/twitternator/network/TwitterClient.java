@@ -1,4 +1,4 @@
-package com.lsilbers.apps.twitternator;
+package com.lsilbers.apps.twitternator.network;
 
 import android.content.Context;
 
@@ -50,4 +50,13 @@ public class TwitterClient extends OAuthBaseClient {
 	 *    i.e client.get(apiUrl, params, handler);
 	 *    i.e client.post(apiUrl, params, handler);
 	 */
+
+
+	public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/home_timeline.json");
+		RequestParams params = new RequestParams();
+		params.put("count", 25);
+		params.put("since_id", 1);
+		client.get(apiUrl, params, handler);
+	}
 }

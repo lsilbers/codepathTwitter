@@ -1,17 +1,23 @@
-package com.lsilbers.apps.twitternator;
+package com.lsilbers.apps.twitternator.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 
 import com.codepath.oauth.OAuthLoginActionBarActivity;
+import com.lsilbers.apps.twitternator.R;
+import com.lsilbers.apps.twitternator.TwitterApplication;
+import com.lsilbers.apps.twitternator.network.TwitterClient;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
+
+	private TwitterClient client;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		client = TwitterApplication.getTwitterClient();
 	}
 
 

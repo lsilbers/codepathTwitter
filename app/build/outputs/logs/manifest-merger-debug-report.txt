@@ -46,7 +46,7 @@ MERGED from [com.android.support:support-v4:23.0.0] /Users/lsilberstein/reposito
 	android:theme
 		ADDED from /Users/lsilberstein/repositories/lsilbers/codepathTwitter/app/src/main/AndroidManifest.xml:19:9-40
 	android:name
-		ADDED from /Users/lsilberstein/repositories/lsilbers/codepathTwitter/app/src/main/AndroidManifest.xml:15:9-70
+		ADDED from /Users/lsilberstein/repositories/lsilbers/codepathTwitter/app/src/main/AndroidManifest.xml:15:9-43
 meta-data#AA_DB_NAME
 ADDED from /Users/lsilberstein/repositories/lsilbers/codepathTwitter/app/src/main/AndroidManifest.xml:20:9-22:45
 	android:value
@@ -94,6 +94,6 @@ ADDED from /Users/lsilberstein/repositories/lsilbers/codepathTwitter/app/src/mai
 data
 ADDED from /Users/lsilberstein/repositories/lsilbers/codepathTwitter/app/src/main/AndroidManifest.xml:42:17-44:46
 	android:host
-		ADDED from /Users/lsilberstein/repositories/lsilbers/codepathTwitter/app/src/main/AndroidManifest.xml:43:21-42
+		ADDED from /Users/lsilberstein/repositories/lsilbers/codepathTwitter/app/src/main/AndroidManifest.xml:43:21-48
 	android:scheme
 		ADDED from /Users/lsilberstein/repositories/lsilbers/codepathTwitter/app/src/main/AndroidManifest.xml:44:21-43
