@@ -4,8 +4,11 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by lsilberstein on 11/5/15.
@@ -63,5 +66,19 @@ public class Tweet extends Model {
         }
 
         return tweet;
+    }
+
+    public static ArrayList<Tweet> fromJSON(JSONArray jsonArray) {
+        ArrayList<Tweet> tweets = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                tweets.add(fromJSON(jsonArray.getJSONObject(i)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return tweets;
     }
 }

@@ -3,5 +3,6 @@
 
     <string name="app_name">Tweeternator</string>
     <string name="login_label">Log in</string>
+    <string name="title_activity_home_timeline">HomeTimelineActivity</string>
 
 </resources>

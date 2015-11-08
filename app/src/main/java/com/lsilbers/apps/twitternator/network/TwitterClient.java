@@ -1,6 +1,8 @@
 package com.lsilbers.apps.twitternator.network;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -27,36 +29,36 @@ public class TwitterClient extends OAuthBaseClient {
 	public static final String REST_CONSUMER_KEY = "aJ2tlNrIKwpqRuwD9xvBd29iN";       // Change this
 	public static final String REST_CONSUMER_SECRET = "nLTxNOqZ7O7Nqql3nqC4pkzGmmO9NNbBSsOYD1SF7vp1lMCu9b"; // Change this
 	public static final String REST_CALLBACK_URL = "oauth://lsilberstwit"; // Change this (here and in manifest)
+	private static final Integer DEFAULT_COUNT = 25;
+    private static final String TAG = "TC";
 
-	public TwitterClient(Context context) {
+    public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
 	}
 
-	// CHANGE THIS
-	// DEFINE METHODS for different API endpoints here
-	public void getInterestingnessList(AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("?nojsoncallback=1&method=flickr.interestingness.getList");
-		// Can specify query string params directly or through RequestParams.
-		RequestParams params = new RequestParams();
-		params.put("format", "json");
-		client.get(apiUrl, params, handler);
-	}
-
-	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-	 * 	  i.e getApiUrl("statuses/home_timeline.json");
-	 * 2. Define the parameters to pass to the request (query or body)
-	 *    i.e RequestParams params = new RequestParams("foo", "bar");
-	 * 3. Define the request method and make a call to the client
-	 *    i.e client.get(apiUrl, params, handler);
-	 *    i.e client.post(apiUrl, params, handler);
+	/**
+	 * Retrieves the home timeline
+	 * @param handler the response handler (should take a jsonArray and convert to tweets)
+	 * @param count the number of results to return (defaults to 25)
+	 * @param sinceId the id of the youngest tweet you wish to return (defaults to 1)
+	 * @param maxId the id of the oldest tweet you wish to return
 	 */
-
-
-	public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+	public void getHomeTimeline(AsyncHttpResponseHandler handler, @Nullable Integer count, @Nullable Long sinceId, @Nullable Long maxId) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
-		params.put("count", 25);
-		params.put("since_id", 1);
+		if (count == null) {
+			count = DEFAULT_COUNT;
+		}
+		params.put("count", count);
+		if (sinceId == null) {
+			sinceId = 1l;
+		}
+		params.put("since_id", sinceId);
+		// only use max id if specified
+		if (maxId != null) {
+			params.put("max_id", maxId);
+		}
 		client.get(apiUrl, params, handler);
+        Log.d(TAG, "GET " + apiUrl + "?" + params.toString());
 	}
 }
