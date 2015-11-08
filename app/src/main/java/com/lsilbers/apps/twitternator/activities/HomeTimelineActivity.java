@@ -14,6 +14,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.lsilbers.apps.twitternator.R;
 import com.lsilbers.apps.twitternator.TwitterApplication;
 import com.lsilbers.apps.twitternator.adapters.TweetAdapter;
+import com.lsilbers.apps.twitternator.fragments.TweetCompositionFragment;
 import com.lsilbers.apps.twitternator.models.Tweet;
 import com.lsilbers.apps.twitternator.network.TwitterClient;
 import com.lsilbers.apps.twitternator.utils.EndlessRecyclerOnScrollListener;
@@ -24,7 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class HomeTimelineActivity extends AppCompatActivity {
+public class HomeTimelineActivity extends AppCompatActivity implements TweetCompositionFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "HT";
     private TwitterClient client;
@@ -113,4 +114,8 @@ public class HomeTimelineActivity extends AppCompatActivity {
         }, null, null, null); // use defaults for initial request
     }
 
+    @Override
+    public void onTweet(String tweet) {
+        Log.d(TAG, tweet);
+    }
 }

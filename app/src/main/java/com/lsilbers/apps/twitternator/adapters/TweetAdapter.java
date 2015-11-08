@@ -48,6 +48,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvBody.setText(tweet.getText());
         holder.tvTimestamp.setText(TweetDisplayUtils.getRelativeTimeAgo(tweet.getCreatedAt()));
 
+        holder.ivProfile.setImageResource(0);
         Picasso.with(holder.context).load(tweet.getUser().getProfileImageUrl()).into(holder.ivProfile);
     }
 
