@@ -55,7 +55,7 @@
         android:layout_marginRight="5dp"
         />
 
-    <TextView
+    <com.lsilbers.apps.twitternator.utils.LinkifiedTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Large Text"
@@ -66,7 +66,9 @@
         android:layout_alignLeft="@id/tvName"
         android:layout_alignStart="@id/tvName"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:autoLink="all"
+        android:linksClickable="true"/>
 
 
 </RelativeLayout>

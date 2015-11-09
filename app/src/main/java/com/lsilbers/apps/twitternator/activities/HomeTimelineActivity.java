@@ -3,6 +3,7 @@ package com.lsilbers.apps.twitternator.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,7 @@ public class HomeTimelineActivity extends AppCompatActivity {
     private TweetAdapter aTweets;
     private ArrayList<Tweet> tweets;
     private RecyclerView rvTweets;
+    private SwipeRefreshLayout srTimeline;
     private long oldestId;
     private long newestTweet;
 
@@ -44,11 +46,18 @@ public class HomeTimelineActivity extends AppCompatActivity {
         tweets = new ArrayList<>();
         aTweets = new TweetAdapter(tweets);
         rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
+        srTimeline = (SwipeRefreshLayout) findViewById(R.id.srTimeline);
 
         setupRecyclerView();
+        srTimeline.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                retriveInitialResults();
+            }
+        });
 
+        loadSavedTweets();
         client = TwitterApplication.getTwitterClient();
-        //retriveInitialResults();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +68,12 @@ public class HomeTimelineActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void loadSavedTweets(){
+        Log.d(TAG, "Loading saved tweets");
+        tweets.addAll(Tweet.getAll());
+        aTweets.notifyDataSetChanged();
     }
 
     private void setupRecyclerView() {
@@ -146,14 +161,22 @@ public class HomeTimelineActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d(TAG, "loaded initial home timeline");
                 tweets.clear();
+                // delete the saved tweets
+                Tweet.clearSavedTweets();
                 tweets.addAll(Tweet.fromJSON(response));
                 aTweets.notifyDataSetChanged();
                 newestTweet = tweets.get(0).getTweetId();
                 oldestId = tweets.get(tweets.size()-1).getTweetId();
+                if(srTimeline != null) {
+                    srTimeline.setRefreshing(false);
+                }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                if(srTimeline != null) {
+                    srTimeline.setRefreshing(false);
+                }
                 Log.d(TAG, "initial results error " + (errorResponse != null ? errorResponse.toString() : "status code " + statusCode));
             }
         }, null, null, null); // use defaults for initial request

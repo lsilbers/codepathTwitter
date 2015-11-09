@@ -3,6 +3,7 @@ package com.lsilbers.apps.twitternator.models;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,7 +65,11 @@ public class User extends Model {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        user.save();
         return user;
+    }
+
+    public static void clearSavedUsers(){
+        new Delete().from(User.class).execute();
     }
 }

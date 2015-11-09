@@ -91,7 +91,7 @@ public class TweetCompositionActivity extends AppCompatActivity {
     // first check if all the necessary configuration is done then populates the fields if it is
     private void populateView() {
         if (user != null && canPopulate) {
-            tvMyUsername.setText("@"+user.getScreenName());
+            tvMyUsername.setText(getResources().getString(R.string.at_symbol,user.getScreenName()));
             tvMyName.setText(user.getName());
             Picasso.with(this).load(user.getProfileImageUrl()).into(ivMyProfile);
         }

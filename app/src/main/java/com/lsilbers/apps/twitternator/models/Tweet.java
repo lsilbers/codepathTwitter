@@ -3,12 +3,15 @@ package com.lsilbers.apps.twitternator.models;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by lsilberstein on 11/5/15.
@@ -64,7 +67,7 @@ public class Tweet extends Model {
             e.printStackTrace();
             return null;
         }
-
+        tweet.save();
         return tweet;
     }
 
@@ -80,5 +83,23 @@ public class Tweet extends Model {
         }
 
         return tweets;
+    }
+
+    /**
+     * @return retrieves all saved tweets from the database
+     */
+    public static List<Tweet> getAll(){
+        return new Select()
+                .from(Tweet.class)
+                .orderBy("tweet_id desc")
+                .execute();
+    }
+
+    /**
+     * Delete all saved tweets and users
+     */
+    public static void clearSavedTweets() {
+        new Delete().from(Tweet.class).execute();
+        User.clearSavedUsers();
     }
 }

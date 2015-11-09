@@ -2,6 +2,7 @@ package com.lsilbers.apps.twitternator.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
  */
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
+    private static final String TAG = "TA";
     private ArrayList<Tweet> tweets;
 
     public TweetAdapter(ArrayList<Tweet> tweets) {
@@ -43,7 +45,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     public void onBindViewHolder(TweetAdapter.ViewHolder holder, int position) {
         Tweet tweet = tweets.get(position);
 
-        holder.tvUsername.setText("@"+tweet.getUser().getScreenName());
+        holder.tvUsername.setText(holder.context.getResources().getString(R.string.at_symbol,tweet.getUser().getScreenName()));
         holder.tvName.setText(tweet.getUser().getName());
         holder.tvBody.setText(tweet.getText());
         holder.tvTimestamp.setText(TweetDisplayUtils.getRelativeTimeAgo(tweet.getCreatedAt()));
@@ -57,7 +59,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         return tweets.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView ivProfile;
         public TextView tvName;
         public TextView tvUsername;
@@ -74,6 +76,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
             tvTimestamp = (TextView) itemView.findViewById(R.id.tvTimestamp);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "item clicked");
         }
     }
 }
