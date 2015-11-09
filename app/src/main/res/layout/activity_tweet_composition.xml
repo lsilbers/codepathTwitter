@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lsilbers.apps.twitternator.fragments.TweetCompositionFragment">
+    tools:context="com.lsilbers.apps.twitternator.fragments.TweetCompositionFragment"
+    android:background="#FFFFFF">
 
 
     <ImageView
@@ -11,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/ic_launcher"
+        android:layout_margin="10dp"
         />
 
     <TextView
@@ -21,17 +22,20 @@
         android:layout_toRightOf="@id/ivMyProfile"
         android:id="@+id/tvMyName"
         android:layout_alignTop="@id/ivMyProfile"
-        android:text="Your Name"
+        android:textColor="@color/name"
+        android:textSize="@dimen/name_size"
         />
 
     <TextView
+        android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvMyUsername"
         android:layout_toEndOf="@id/ivMyProfile"
         android:layout_toRightOf="@id/ivMyProfile"
         android:layout_below="@id/tvMyName"
-        android:text="\@user"
+        android:textColor="@color/screen_name"
+        android:textSize="@dimen/screen_name_size"
         />
 
     <EditText

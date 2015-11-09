@@ -11,8 +11,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".TwitterApplication"
@@ -50,6 +50,11 @@
         <activity
             android:name=".activities.HomeTimelineActivity"
             android:label="@string/title_activity_home_timeline"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".activities.TweetCompositionActivity"
+            android:label="@string/title_activity_tweet_composition"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>

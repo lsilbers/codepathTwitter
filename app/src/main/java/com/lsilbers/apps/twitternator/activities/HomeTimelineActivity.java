@@ -1,8 +1,8 @@
 package com.lsilbers.apps.twitternator.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +14,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.lsilbers.apps.twitternator.R;
 import com.lsilbers.apps.twitternator.TwitterApplication;
 import com.lsilbers.apps.twitternator.adapters.TweetAdapter;
-import com.lsilbers.apps.twitternator.fragments.TweetCompositionFragment;
 import com.lsilbers.apps.twitternator.models.Tweet;
 import com.lsilbers.apps.twitternator.network.TwitterClient;
 import com.lsilbers.apps.twitternator.utils.EndlessRecyclerOnScrollListener;
@@ -25,7 +24,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class HomeTimelineActivity extends AppCompatActivity implements TweetCompositionFragment.OnFragmentInteractionListener{
+public class HomeTimelineActivity extends AppCompatActivity {
 
     private static final String TAG = "HT";
     private TwitterClient client;
@@ -33,6 +32,7 @@ public class HomeTimelineActivity extends AppCompatActivity implements TweetComp
     private ArrayList<Tweet> tweets;
     private RecyclerView rvTweets;
     private long oldestId;
+    private long newestTweet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +48,15 @@ public class HomeTimelineActivity extends AppCompatActivity implements TweetComp
         setupRecyclerView();
 
         client = TwitterApplication.getTwitterClient();
-        retriveInitialResults();
+        //retriveInitialResults();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // new activity to create a tweet
+                Intent intent = new Intent(HomeTimelineActivity.this, TweetCompositionActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -67,26 +68,68 @@ public class HomeTimelineActivity extends AppCompatActivity implements TweetComp
         rvTweets.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore() {
-                client.getHomeTimeline(new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        int count = aTweets.getItemCount();
-                        ArrayList<Tweet> newTweets = Tweet.fromJSON(response);
-                        for (Tweet tweet : newTweets) {
-                            tweets.add(tweet);
-                            aTweets.notifyItemInserted(count);
-                            count++;
-                            updateOldestId(tweet);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        Log.d(TAG, errorResponse.toString());
-                    }
-                }, 10, null, oldestId - 1);
+                getOlderTweets();
             }
         });
+    }
+
+    private void getOlderTweets() {
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d(TAG, "got home timeline for older tweets");
+                int count = aTweets.getItemCount();
+                ArrayList<Tweet> newTweets = Tweet.fromJSON(response);
+                for (Tweet tweet : newTweets) {
+                    tweets.add(tweet);
+                    aTweets.notifyItemInserted(count);
+                    count++;
+                    updateOldestId(tweet);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d(TAG, "old tweets error " + (errorResponse != null ? errorResponse.toString() : "status code " + statusCode));
+            }
+        }, 10, null, oldestId - 1);
+    }
+
+    @Override
+    protected void onResume() {
+        //getNewerTweets();
+        retriveInitialResults();
+        super.onResume();
+    }
+
+    // at the moment we choose not to use this method - I think it is a little trick to work out how
+    // to decide how many results we want etc so we just
+    private void getNewerTweets() {
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d(TAG, "Got home timeline for newer tweets");
+                int index = 0;
+                ArrayList<Tweet> newTweets = Tweet.fromJSON(response);
+                for (Tweet tweet : newTweets) {
+                    tweets.add(index, tweet);
+                    index++;
+                    updateNewestId(tweet);
+                }
+                aTweets.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d(TAG, "new tweets error " + (errorResponse != null ? errorResponse.toString() : "status code " + statusCode));
+            }
+        }, 50, newestTweet, null);
+    }
+
+    private void updateNewestId(Tweet tweet) {
+        if (tweet.getTweetId() > newestTweet) {
+            newestTweet = tweet.getTweetId();
+        }
     }
 
     private void updateOldestId(Tweet tweet) {
@@ -98,24 +141,21 @@ public class HomeTimelineActivity extends AppCompatActivity implements TweetComp
 
     // gets the basic set of results and notifies the adapter
     private void retriveInitialResults() {
-        client.getHomeTimeline(new JsonHttpResponseHandler(){
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d(TAG, "loaded initial home timeline");
+                tweets.clear();
                 tweets.addAll(Tweet.fromJSON(response));
                 aTweets.notifyDataSetChanged();
-                Tweet t1 = tweets.get(0);
-                oldestId = t1.getTweetId();
+                newestTweet = tweets.get(0).getTweetId();
+                oldestId = tweets.get(tweets.size()-1).getTweetId();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d(TAG, errorResponse.toString());
+                Log.d(TAG, "initial results error " + (errorResponse != null ? errorResponse.toString() : "status code " + statusCode));
             }
         }, null, null, null); // use defaults for initial request
-    }
-
-    @Override
-    public void onTweet(String tweet) {
-        Log.d(TAG, tweet);
     }
 }

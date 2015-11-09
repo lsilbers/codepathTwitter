@@ -43,12 +43,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     public void onBindViewHolder(TweetAdapter.ViewHolder holder, int position) {
         Tweet tweet = tweets.get(position);
 
-        holder.tvUsername.setText(tweet.getUser().getScreenName());
+        holder.tvUsername.setText("@"+tweet.getUser().getScreenName());
         holder.tvName.setText(tweet.getUser().getName());
         holder.tvBody.setText(tweet.getText());
         holder.tvTimestamp.setText(TweetDisplayUtils.getRelativeTimeAgo(tweet.getCreatedAt()));
 
-        holder.ivProfile.setImageResource(0);
+        holder.ivProfile.setImageResource(android.R.color.transparent);
         Picasso.with(holder.context).load(tweet.getUser().getProfileImageUrl()).into(holder.ivProfile);
     }
 
