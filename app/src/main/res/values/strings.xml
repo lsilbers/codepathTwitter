@@ -9,5 +9,6 @@
     <string name="tweet">Tweet</string>
     <string name="title_activity_tweet_composition">Tweet</string>
     <string name="login_welcome">Welcome to the Twitternator</string>
+    <string name="characters_remaining">140</string>
 
 </resources>

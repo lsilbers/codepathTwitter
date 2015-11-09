@@ -38,6 +38,15 @@
         android:textSize="@dimen/screen_name_size"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/ivMyProfile"
+        android:id="@+id/tvCharRemain"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/characters_remaining"/>
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -2,6 +2,8 @@ package com.lsilbers.apps.twitternator.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +29,7 @@ public class TweetCompositionActivity extends AppCompatActivity {
     private ImageView ivMyProfile;
     private TextView tvMyName;
     private TextView tvMyUsername;
+    private TextView tvCharRemain;
     private EditText etTweet;
     private Button btnTweet;
     private TwitterClient client;
@@ -42,6 +45,23 @@ public class TweetCompositionActivity extends AppCompatActivity {
         tvMyName = (TextView) findViewById(R.id.tvMyName);
         tvMyUsername = (TextView) findViewById(R.id.tvMyUsername);
         etTweet = (EditText) findViewById(R.id.etTweet);
+        tvCharRemain = (TextView) findViewById(R.id.tvCharRemain);
+        etTweet.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tvCharRemain.setText(String.valueOf(140-s.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         btnTweet = (Button) findViewById(R.id.btnTweet);
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
